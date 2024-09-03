@@ -10,7 +10,7 @@ use macroquad::prelude::{
     KeyCode,
     draw_text,
     draw_text_ex,
-    BLUE,
+    Color
 };
 
 const THE_STRONGEST_TEST: &str = "3.141592653589793238462643383279502884197";
@@ -75,7 +75,7 @@ pub fn update(game: &mut Game, delta: f32) {
     }
 }
 
-pub fn draw(game: &Game, param1: &TextParams<'_>, param2: &TextParams<'_>) {
+pub fn draw(game: &mut Game, param1: &TextParams<'_>, param2: &TextParams<'_>, init_time: f32) {
     match game.state {
         GameState::InputPi => {
             clear_background(BLACK);
@@ -102,13 +102,13 @@ pub fn draw(game: &Game, param1: &TextParams<'_>, param2: &TextParams<'_>) {
                 ..*param2
             });
 
-            draw_text_ex("YOU WON'T BE GOING ANYWHERE! NOT WITHOUT COMPLETING YOUR NONSENSE!", 5., 170., TextParams {
+            draw_text_ex("YOU WON'T BE GOING ANYWHERE!", 210., 170., TextParams {
                 font_size: 30,
                 color: BLACK,
                 ..*param1
             });
 
-            draw_text_ex("YOU WON'T BE GOING ANYWHERE! NOT WITHOUT COMPLETING YOUR NONSENSE!", 5., 190., TextParams {
+            draw_text_ex("NOT WITHOUT COMPLETING YOUR NONSENSE!", 150., 190., TextParams {
                 font_size: 20,
                 color: BLACK,
                 ..*param2
@@ -118,11 +118,11 @@ pub fn draw(game: &Game, param1: &TextParams<'_>, param2: &TextParams<'_>) {
         GameState::WrongPi => {
             clear_background(RED);
 
-            draw_text_ex("WRONG YOU IDIOT!", W as f32 / 2. - 130., 260., TextParams {
+            draw_text_ex("WRONG YOU IDIOT!", W as f32 / 2. - 150., 260., TextParams {
                 color: BLACK,
                 ..*param1
             });
-            draw_text_ex("WRONG YOU FAILURE", W as f32 / 2. - 130., 280., TextParams {
+            draw_text_ex("WRONG YOU FAILURE", W as f32 / 2. - 150., 280., TextParams {
                 color: BLACK,
                 ..*param2
             });
@@ -130,12 +130,17 @@ pub fn draw(game: &Game, param1: &TextParams<'_>, param2: &TextParams<'_>) {
 
         GameState::Completed => {
             clear_background(WHITE);
-            draw_text("well done, you may rest now", W as f32 / 2. - 270., 300., 50., BLUE);
-            //I tried to implement smooth rgb changing to this text but it didn't work out
-            //pseudo code:
-            //*get delta from function param*
-            //set a variable to add delta: colour += delta;
-            //Color::from_rgba(colour as u8, colour as u8, colour as u8, 255);
+            
+            let rgb = set_rgb(init_time);
+
+            draw_text("well done, you may rest now", W as f32 / 2. - 270., 300., 50., Color::new(
+                rgb,
+                rgb * 0.5 + 0.25,
+                rgb * 0.75 + 0.5,
+                1.
+            ));
         }
     }
 }
+
+fn set_rgb(init_time: f32) -> f32 {(init_time % 2. - 1.).abs()}

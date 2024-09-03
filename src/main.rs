@@ -14,6 +14,7 @@ use macroquad::prelude::{
 };
 
 use macroquad::miniquad::conf::Icon;
+use macroquad::time::get_time;
 use pi_tester::{
     update,
     W,
@@ -66,9 +67,10 @@ async fn main() {
         if game.quit_ok {break;}
 
         let delta = get_frame_time();
+        let init_time = get_time() as f32;
 
         update(&mut game, delta);
-        draw(&game, &param1, &param2);
+        draw(&mut game, &param1, &param2, init_time);
 
         next_frame().await;
     }
