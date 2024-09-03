@@ -131,6 +131,11 @@ pub fn draw(game: &Game, param1: &TextParams<'_>, param2: &TextParams<'_>) {
         GameState::Completed => {
             clear_background(WHITE);
             draw_text("well done, you may rest now", W as f32 / 2. - 270., 300., 50., BLUE);
+            //I tried to implement smooth rgb changing to this text but it didn't work out
+            //pseudo code:
+            //*get delta from function param*
+            //set a variable to add delta: colour += delta;
+            //Color::from_rgba(colour as u8, colour as u8, colour as u8, 255);
         }
     }
 }
